@@ -1,0 +1,47 @@
+#!/usr/bin/env groovy
+library 'jenkins-lib'
+
+pipeline {
+
+  agent {
+    kubernetes {
+      cloud getKubernetesClusterName()
+      yaml readK8sConfig('build', '4Gi', '1')
+    }
+  }
+
+  options {
+    timestamps()
+    ansiColor('xterm')
+  }
+
+  stages {
+    stage ('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        withCredentials([
+          [
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'artifactory-sirenpublisher',
+            passwordVariable: 'PASSWORD',
+            usernameVariable: 'USERNAME'
+          ]
+        ]) {
+            sh '''#!/bin/bash
+            mvn -DskipTests=true \
+                -P artifactory \
+                -Dartifactory_username=$USERNAME \
+                -Dartifactory_password=$PASSWORD \
+                deploy
+            '''
+        }
+      }
+    }
+  }
+
+}
