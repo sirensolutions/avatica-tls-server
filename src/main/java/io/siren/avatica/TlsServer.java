@@ -55,7 +55,7 @@ public class TlsServer {
   private String keystore;
 
   @Parameter(names = {"--keystorePassword"}, description = "The keystore password")
-  private String keystorePassword;
+  private String keystorePassword = "password";
 
   @Parameter(names = {"-s", "--serialization"},
       description = "Serialization method to use", converter = SerializationConverter.class)
