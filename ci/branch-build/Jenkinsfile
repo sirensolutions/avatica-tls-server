@@ -22,6 +22,12 @@ pipeline {
       }
     }
 
+    stage('Build') {
+      steps {
+        sh 'mvn package'
+      }
+    }
+
     stage('Deploy') {
       steps {
         withCredentials([
@@ -33,12 +39,32 @@ pipeline {
           ]
         ]) {
             sh '''#!/bin/bash
-            mvn -DskipTests=true \
+               mvn -DskipTests=true \
                 -P artifactory \
                 -Dartifactory_username=$USERNAME \
                 -Dartifactory_password=$PASSWORD \
                 deploy
             '''
+        }
+      }
+    }
+
+    stage('Docker') {
+      steps {
+        withCredentials([
+          [
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'dockerhub-sirenpublisher',
+            passwordVariable: 'PASSWORD',
+            usernameVariable: 'USERNAME'
+          ]
+        ]) {
+          sh '''#!/bin/bash
+            export VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec`
+            cat "${PASSWORD}" | buildah login -u "${USERNAME}" --password-stdin
+            buildah bud --format docker -t "sirensolutions/avatica-tls-server:${VERSION}" .
+            buildah push "sirensolutions/avatica-tls-server:${VERSION}"
+          '''
         }
       }
     }
