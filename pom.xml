@@ -34,11 +34,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.calcite.avatica</groupId>
-      <artifactId>avatica-core</artifactId>
-      <version>${avatica.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.calcite.avatica</groupId>
       <artifactId>avatica-server</artifactId>
       <version>${avatica.version}</version>
     </dependency>
@@ -95,8 +90,8 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <artifactSet>
                 <includes>
-                  <include>org.apache.calcite.avatica:*</include>
-                  <include>org.slf4j:*</include>
+                  <include>org.apache.calcite.avatica:avatica</include>
+                  <include>org.apache.calcite.avatica:avatica-server</include>
                   <include>com.beust:*</include>
                   <include>com.google.guava:*</include>
                   <include>com.google.protobuf:*</include>
