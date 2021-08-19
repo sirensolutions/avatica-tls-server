@@ -46,7 +46,7 @@ public class TlsServer {
   private String url;
 
   @Parameter(names = {"-p", "--port"}, description = "Port the server should bind to")
-  private int port = 0;
+  private int port = 8765;
 
   @Parameter(names = {"--host"}, description = "IP address the server should bind to")
   private String host = "0.0.0.0";
