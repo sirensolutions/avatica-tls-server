@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  # PostgreSQL container with a test database
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_USER=test"
+      - "POSTGRES_PASSWORD=password"
+
+  # Avatica TLS server container with the PostgreSQL JDBC Driver
+  avatica:
+    build: ./avatica-pgsql
+    depends_on:
+      - postgres
+    ports:
+      - "8765:8765"
+    links:
+      - "postgres:postgres"
+    volumes:
+      - "./pki:/home/avatica/pki"
+    command:
+      # The keystore
+      - "--keystore"
+      - "/home/avatica/pki/avatica.p12"
+      # The keystore password
+      - "--keystorePassword"
+      - "password"
+      # The JDBC URL pointing to the PostgreSQL container
+      - "-u"
+      - "jdbc:postgresql://postgres:5432/test"
+      # The serialization mechanism used by Avatica
+      # (protobuf by default, set to json in this example to simplify the validation)
+      - "-s"
+      - "json"
