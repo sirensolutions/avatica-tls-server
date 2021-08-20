@@ -199,7 +199,7 @@ openssl pkcs12 -in avatica.p12 -clcerts -nokeys -out avatica.pem
 keytool -import -file avatica.pem -alias ca -keystore truststore.jks
 ```
 
-The `TRUSTORE` JDBC property can then be set to point to the `truststore.jks` file.
+The `TRUSTSTORE` JDBC property can then be set to point to the `truststore.jks` file.
 
 ## License
 
