@@ -1,5 +1,5 @@
 FROM openjdk:11-jre
-MAINTAINER Sindice LTD <info@siren.io>
+LABEL io.siren.avatica.maintainer="Sindice LTD <info@siren.io>"
 
 RUN useradd -m avatica
 RUN mkdir -p /home/avatica/server && \
