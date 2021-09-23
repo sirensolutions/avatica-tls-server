@@ -6,7 +6,7 @@
 
   <groupId>io.siren</groupId>
   <artifactId>avatica-tls-server</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>Avatica TLS Server</name>
   <description>A wrapper of the Avatica Standalone server with TLS support.</description>
