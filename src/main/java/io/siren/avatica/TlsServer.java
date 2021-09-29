@@ -15,11 +15,12 @@
  */
 package io.siren.avatica;
 
+import org.apache.calcite.avatica.ConnectionPropertiesImpl;
+import org.apache.calcite.avatica.Meta;
 import org.apache.calcite.avatica.jdbc.JdbcMeta;
 import org.apache.calcite.avatica.remote.Driver.Serialization;
 import org.apache.calcite.avatica.remote.LocalService;
 import org.apache.calcite.avatica.server.HttpServer;
-import org.apache.calcite.avatica.server.ServerCustomizer;
 import org.apache.calcite.avatica.util.Unsafe;
 
 import com.beust.jcommander.IStringConverter;
@@ -61,6 +62,12 @@ public class TlsServer {
       description = "Serialization method to use", converter = SerializationConverter.class)
   private Serialization serialization = Serialization.PROTOBUF;
 
+  @Parameter(names = {"--autoCommit"}, description = "Set to false or true to force autoCommit mode on JDBC connections.", arity = 1)
+  private Boolean autoCommit;
+
+  @Parameter(names = {"--readOnly"}, description = "Set to false or true to force readOnly mode on JDBC connection.", arity = 1)
+  private Boolean readOnly;
+
   @Parameter(names = {"-h", "-help", "--help"},help = true, description = "Print the help message")
   private boolean help = false;
 
@@ -68,7 +75,14 @@ public class TlsServer {
 
   public void start() {
     try {
-      JdbcMeta meta = new JdbcMeta(url);
+      final Meta.ConnectionProperties properties = new ConnectionPropertiesImpl();
+      if (this.autoCommit != null) {
+        properties.setAutoCommit(this.autoCommit);
+      }
+      if (this.readOnly != null) {
+        properties.setReadOnly(this.readOnly);
+      }
+      JdbcMeta meta = new ConfigurableJdbcMeta(url, properties);
       LocalService service = new LocalService(meta);
 
       HttpServer.Builder<Server> builder = new HttpServer.Builder<Server>()
