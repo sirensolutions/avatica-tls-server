@@ -5,8 +5,8 @@ The Avatica TLS Server is a variation of the [Avatica Standalone](https://calcit
 - `keystore`: the path to a Java keystore or p12 bundle that contains a key and a certificate for the server.
 - `keystorePassword`: the password of the keystore.
 - `host`: the IP address that the Avatica HTTP server will bind to (bound to all the IP addresses by default).
-- `autoCommit`: allows to force the auto commit mode of JDBC datasource connections.
-- `readOnly`: allows to force the read only mode of JDBC datasource connections.
+- `autoCommit`: allows you to force the auto commit mode of JDBC datasource connections.
+- `readOnly`: allows you to force the read only mode of JDBC datasource connections.
 
 If a keystore is set, TLS will be enabled in the embedded HTTP server, otherwise the server will not enable any form of encrypted transport.
 
@@ -44,8 +44,8 @@ The entry point of the Docker image accepts the following options:
 - `u`: the JDBC URL of the datasource Avatica is connected to (e.g. `jdbc:postgresql://postgres:5432/test`). Note that credentials must not be set in the URL, as they will be specified by Avatica clients and passed through by the Avatica server.
 - `keystore`: the path to a Java keystore or p12 bundle that contains a key and a certificate for the server.
 - `keystorePassword`: the password of the keystore.
-- `autoCommit`: allows to force the auto commit mode of JDBC datasource connections (unset by default, can be `true` or `false`).
-- `readOnly`: allows to force the read only mode of JDBC datasource connections (unset by default, can be `true` or `false`).
+- `autoCommit`: allows you to force the auto commit mode of JDBC datasource connections (unset by default, can be `true` or `false`).
+- `readOnly`: allows you to force the read only mode of JDBC datasource connections (unset by default, can be `true` or `false`).
 
 #### Example
 
@@ -123,8 +123,8 @@ The supported options are as follows:
 - `s`: the [serialization format](https://calcite.apache.org/avatica/docs/client_reference.html#serialization) of Avatica requests; valid values are `json` and `protobuf`, defaults to `protobuf.`
 - `host`: the IP address that the Avatica server will bind to (default to all addresses in the system).
 - `p`: the port that the Avatica server will bind to (defaults to `8765`).
-- `autoCommit`: allows to force the auto commit mode of JDBC datasource connections (unset by default, can be `true` or `false`).
-- `readOnly`: allows to force the read only mode of JDBC datasource connections (unset by default, can be `true` or `false`).
+- `autoCommit`: allows you to force the auto commit mode of JDBC datasource connections (unset by default, can be `true` or `false`).
+- `readOnly`: allows you to force the read only mode of JDBC datasource connections (unset by default, can be `true` or `false`).
 
 For example, assuming that you want to connect to the `test` database of a PostgreSQL server already running at `localhost:5432`, you could follow these steps to start an Avatica TLS Server:
 
