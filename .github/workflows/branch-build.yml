@@ -1,0 +1,34 @@
+name: branch-build
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Run tests and verify package build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Run tests
+        run: mvn test
+      - name: Build package
+        run: mvn package -DskipTests
+      - name: Extract package version
+        run: echo ARTIFACT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec` >> $GITHUB_ENV
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKERHUB_PUBLISHER_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PUBLISHER_PASSWORD }}
+      - name: Build and publish Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: sirensolutions/avatica-tls-server:${{ env.ARTIFACT_VERSION }}
